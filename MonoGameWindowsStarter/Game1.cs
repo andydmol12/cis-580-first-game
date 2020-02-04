@@ -17,8 +17,7 @@ namespace MonoGameWindowsStarter
         Vector2 ballPosition = Vector2.Zero;  //Keeps track of a position on a X Y plane
         Vector2 ballVelocity;
         Paddle paddle;
-        BoundingRectangle
-
+ 
         KeyboardState oldKeyboardState;
         KeyboardState newKeyboardState;
 
@@ -66,7 +65,7 @@ namespace MonoGameWindowsStarter
             // TODO: use this.Content to load your game content here
             ball = Content.Load<Texture2D>("ballThing");
 
-            paddle = Content.Load<Texture2D>("pixel");
+            paddle.LoadContent(Content);
 
 
 
@@ -154,7 +153,7 @@ namespace MonoGameWindowsStarter
             // TODO: Add your drawing code here
             spriteBatch.Begin();
             spriteBatch.Draw(ball, new Rectangle((int)ballPosition.X, (int)ballPosition.Y, 100, 100), Color.White);
-            paddle.Draw(SpriteBatch);
+            paddle.Draw(spriteBatch);
 
             spriteBatch.End();
 

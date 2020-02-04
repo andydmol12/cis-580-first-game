@@ -19,10 +19,9 @@ namespace MonoGameWindowsStarter
         Texture2D texture;
         public Paddle(Game1 game)
         {
-            this.game = game;
-            
-          
 
+            this.game = game;
+               
         }
 
         public void LoadContent(ContentManager content)
@@ -65,10 +64,10 @@ namespace MonoGameWindowsStarter
 
             }
 
-            if (bound.Y > GraphicsDevice.Viewport.Height - bound.Height)
+            if (bound.Y > game.GraphicsDevice.Viewport.Height - bound.Height)
             {
 
-                bound.Y = GraphicsDevice.Viewport.Height - bound.Height;
+                bound.Y = game.GraphicsDevice.Viewport.Height - bound.Height;
 
             }
 
@@ -77,9 +76,7 @@ namespace MonoGameWindowsStarter
       
            
 
-
-            oldKeyboardState = newKeyboardState;
-            base.Update(gameTime);
+            
 
         }
 
@@ -90,15 +87,7 @@ namespace MonoGameWindowsStarter
 
         }
 
-        public static implicit operator Rectangle(BoundingRectangle br)
-        {
-            return new Rectangle(
-                (int)br.X,
-                (int)br.Y,
-                (int)br.Height,
-                (int)br.Width);
-
-        }
+        
 
     }
 }
