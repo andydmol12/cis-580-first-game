@@ -6,19 +6,12 @@ using System.Threading.Tasks;
 
 namespace MonoGameWindowsStarter
 {
-    class Collisions
+    public static class Collisions
     {
 
-        public BoundingRectangle(float X, float Y, float Width, float Height)
-        {
-            this.X = X;
-            this.Y = Y;
-            this.Width = Width;
-            this.Height = Height;
+      
 
-        }
-
-        public bool CollidesWith(this BoundingRectangle a, BoundingRectangle b)
+        public static bool CollidesWith(this BoundingRectangle a, BoundingRectangle b)
         {
 
             return !(a.X > b.X + b.Width || 

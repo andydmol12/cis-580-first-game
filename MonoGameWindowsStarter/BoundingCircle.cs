@@ -12,7 +12,7 @@ namespace MonoGameWindowsStarter
         public float X;
         public float Y;
         public float Radius;
-        public Vector2 Center => new Vector2(X, Y);
+  
 
         public Vector2 Center
         {

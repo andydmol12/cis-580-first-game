@@ -15,28 +15,24 @@ namespace MonoGameWindowsStarter
         public float Width;
         public float Height;
 
-        public BoundingRectangle(float X, float Y, float Width, float Height)
+        public BoundingRectangle(float x, float y, float width, float height)
         {
-            this.X = X;
-            this.Y = Y;
-            this.Width = Width;
-            this.Height = Height;
+            this.X = x;
+            this.Y = y;
+            this.Width = width;
+            this.Height = height;
+            
       
         }
 
-        public bool CollidesWith(BoundingRectangle other)
-        {
-
-            return !(this.X > other.X + other.Width || this.X + this.Width < other.X || this.Y > other.Y + other.Height || this.Y + this.Width < other.Y);
-        }
 
         public static implicit operator Rectangle(BoundingRectangle br)
         {
             return new Rectangle(
                 (int)br.X,
                 (int)br.Y,
-                (int)br.Height,
-                (int)br.Width);
+                (int)br.Width,
+                (int)br.Height);
 
         }
 

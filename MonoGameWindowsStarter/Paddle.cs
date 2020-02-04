@@ -28,10 +28,10 @@ namespace MonoGameWindowsStarter
         {
 
             texture = content.Load<Texture2D>("pixel");
-            bound.Width = 50;
-            bound.Height = 200;
-            bound.X = 0;
-            bound.Y = game.GraphicsDevice.Viewport.Height / 2 - bound.Width / 2;
+            bound.Width = 75;
+            bound.Height = 75;
+            bound.X = game.GraphicsDevice.Viewport.Width / 2 - bound.Width / 2;
+            bound.Y = game.GraphicsDevice.Viewport.Height - 100;
 
         }
 
@@ -46,7 +46,7 @@ namespace MonoGameWindowsStarter
             if (keyboardState.IsKeyDown(Keys.Up))
             {
 
-                bound.Y -= (float)gameTime.ElapsedGameTime.TotalSeconds;
+                bound.Y -= (float)gameTime.ElapsedGameTime.TotalMilliseconds;
 
             }
 
@@ -55,6 +55,35 @@ namespace MonoGameWindowsStarter
 
                 bound.Y += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
                 
+            }
+
+            if (keyboardState.IsKeyDown(Keys.Left))
+            {
+
+                bound.X -= (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+
+            }
+
+            if (keyboardState.IsKeyDown(Keys.Right))
+            {
+
+                bound.X += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+
+            }
+
+
+            if (bound.X < 0)
+            {
+
+                bound.X = 0;
+
+            }
+
+            if (bound.X > game.GraphicsDevice.Viewport.Width - bound.Width)
+            {
+
+                bound.X = game.GraphicsDevice.Viewport.Width - bound.Width;
+
             }
 
             if (bound.Y < 0)
@@ -84,7 +113,7 @@ namespace MonoGameWindowsStarter
         {
 
             spriteBatch.Draw(texture, bound, Color.Green);
-
+            
         }
 
         
