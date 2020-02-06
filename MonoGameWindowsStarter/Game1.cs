@@ -12,10 +12,8 @@ namespace MonoGameWindowsStarter
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        Random random = new Random();
-        Texture2D ball;
-        Vector2 ballPosition = Vector2.Zero;  //Keeps track of a position on a X Y plane
-        Vector2 ballVelocity;
+        public Random random = new Random();
+        Ball ball;
         Paddle paddle;
  
         KeyboardState oldKeyboardState;
@@ -28,6 +26,7 @@ namespace MonoGameWindowsStarter
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             paddle = new Paddle(this);
+            ball = new Ball(this);
         }
 
         /// <summary>
@@ -43,9 +42,9 @@ namespace MonoGameWindowsStarter
             graphics.PreferredBackBufferWidth = 1042;
             graphics.PreferredBackBufferHeight = 768;
             graphics.ApplyChanges();
-
-            ballVelocity = new Vector2((float)random.NextDouble(), (float)random.NextDouble());
-            ballVelocity.Normalize();
+            ball.Initialize();
+            paddle.Initialize();
+           
 
           
 
@@ -63,7 +62,7 @@ namespace MonoGameWindowsStarter
 
 
             // TODO: use this.Content to load your game content here
-            ball = Content.Load<Texture2D>("ballThing");
+            ball.LoadContent(Content);
 
             paddle.LoadContent(Content);
 
@@ -97,46 +96,21 @@ namespace MonoGameWindowsStarter
                 Exit();
 
             paddle.Update(gameTime);
+            ball.Update(gameTime);
 
             // TODO: Add your update logic here
 
-            ballPosition += (float)gameTime.ElapsedGameTime.TotalMilliseconds * ballVelocity;
+            
 
-            // Check for wall collisions
-            if (ballPosition.Y < 0)
-            {
-                ballVelocity.Y *= -1;
-                float delta = 0 - ballPosition.Y;
-                ballPosition.Y += 2 * delta;
-
-            }
-
-            if (ballPosition.Y > graphics.PreferredBackBufferHeight - 100)
+            
+            if(paddle.bound.CollidesWith(ball.bound))
             {
 
-                ballVelocity.Y *= -1;
-                float delta = graphics.PreferredBackBufferHeight - 100 - ballPosition.Y;
-                ballPosition.Y += 2 * delta;
+                ball.Velocity.X *= -1;
+                var delta = (paddle.bound.X + paddle.bound.Width) - (ball.bound.X - ball.bound.Radius);
+                ball.bound.X += 2 * delta;
 
             }
-
-            if (ballPosition.X < 0)
-            {
-                ballVelocity.X *= -1;
-                float delta = 0 - ballPosition.X;
-                ballPosition.X += 2 * delta;        
-
-            }
-
-            if (ballPosition.X > graphics.PreferredBackBufferWidth - 100)
-            {
-
-                ballVelocity.X *= -1;
-                float delta = graphics.PreferredBackBufferWidth - 100 - ballPosition.X;
-                ballPosition.X += 2 * delta;
-
-            }
-
 
             oldKeyboardState = newKeyboardState;
             base.Update(gameTime);
@@ -152,7 +126,7 @@ namespace MonoGameWindowsStarter
 
             // TODO: Add your drawing code here
             spriteBatch.Begin();
-            spriteBatch.Draw(ball, new Rectangle((int)ballPosition.X, (int)ballPosition.Y, 100, 100), Color.White);
+            ball.Draw(spriteBatch);
             paddle.Draw(spriteBatch);
 
             spriteBatch.End();

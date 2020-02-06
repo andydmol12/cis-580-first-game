@@ -11,12 +11,17 @@ using Microsoft.Xna.Framework.Content;
 
 namespace MonoGameWindowsStarter
 {
-    class Paddle
+    public class Paddle
     {
         Game1 game;
-        BoundingRectangle bound;
+        public BoundingRectangle bound;
 
         Texture2D texture;
+        Vector2 velocity;
+        bool jumped;
+
+
+
         public Paddle(Game1 game)
         {
 
@@ -24,14 +29,22 @@ namespace MonoGameWindowsStarter
                
         }
 
+        public void Initialize()
+        {
+           
+            bound.Width = 200;
+            bound.Height = 200;
+            bound.X = game.GraphicsDevice.Viewport.Width / 2 - bound.Width / 2;
+            bound.Y = game.GraphicsDevice.Viewport.Height;
+            
+
+        }
+
         public void LoadContent(ContentManager content)
         {
 
             texture = content.Load<Texture2D>("pixel");
-            bound.Width = 75;
-            bound.Height = 75;
-            bound.X = game.GraphicsDevice.Viewport.Width / 2 - bound.Width / 2;
-            bound.Y = game.GraphicsDevice.Viewport.Height - 100;
+            
 
         }
 
@@ -39,18 +52,43 @@ namespace MonoGameWindowsStarter
         {
 
             var keyboardState = Keyboard.GetState();
-          
+            bound.Y += velocity.Y;
 
            
 
-            if (keyboardState.IsKeyDown(Keys.Up))
+            if (keyboardState.IsKeyDown(Keys.Up) && jumped == false)
             {
-
-                bound.Y -= (float)gameTime.ElapsedGameTime.TotalMilliseconds;
+              
+                bound.Y -= 10f;
+                velocity.Y = -5f;
+                jumped = true;            
 
             }
 
-            if (keyboardState.IsKeyDown(Keys.Down))
+            if (jumped == true)
+            {
+
+                float i = 1;
+                velocity.Y += 0.15f * i;
+
+            }
+
+            if (bound.Y >= 565)
+            {
+
+                jumped = false;
+
+            }
+            if(jumped == false)
+            {
+
+                velocity.Y = 0f;
+
+            }
+
+
+          
+            if (keyboardState.IsKeyDown(Keys.Down) && jumped == false)
             {
 
                 bound.Y += (float)gameTime.ElapsedGameTime.TotalMilliseconds;
@@ -79,10 +117,10 @@ namespace MonoGameWindowsStarter
 
             }
 
-            if (bound.X > game.GraphicsDevice.Viewport.Width - bound.Width)
+            if (bound.X > game.GraphicsDevice.Viewport.Width - (bound.Width))
             {
 
-                bound.X = game.GraphicsDevice.Viewport.Width - bound.Width;
+                bound.X = game.GraphicsDevice.Viewport.Width - (bound.Width);
 
             }
 
@@ -98,12 +136,7 @@ namespace MonoGameWindowsStarter
 
                 bound.Y = game.GraphicsDevice.Viewport.Height - bound.Height;
 
-            }
-
-            // TODO: Add your update logic here
-
-      
-           
+            }         
 
             
 
@@ -111,8 +144,8 @@ namespace MonoGameWindowsStarter
 
         public void Draw(SpriteBatch spriteBatch)
         {
-
-            spriteBatch.Draw(texture, bound, Color.Green);
+            
+            spriteBatch.Draw(texture, bound, Color.White);
             
         }
 

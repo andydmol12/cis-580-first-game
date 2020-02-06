@@ -24,6 +24,16 @@ namespace MonoGameWindowsStarter
             
       
         }
+        public Vector2 Center
+        {
+            get => new Vector2(X, Y);
+            set
+            {
+                X = value.X;
+                Y = value.Y;
+            }
+        }
+
 
 
         public static implicit operator Rectangle(BoundingRectangle br)
