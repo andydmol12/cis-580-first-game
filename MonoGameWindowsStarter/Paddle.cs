@@ -27,7 +27,7 @@ namespace MonoGameWindowsStarter
         enum State
         {
             East = 3,
-            West = 1,
+            West = 2,
             Idle = 0,
 
         }
