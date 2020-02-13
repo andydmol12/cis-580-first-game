@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Audio;
 
 namespace MonoGameWindowsStarter
 {
@@ -20,6 +21,8 @@ namespace MonoGameWindowsStarter
         public BoundingCircle bound;
 
         public Vector2 Velocity;
+
+        SoundEffect bounceSFX;
 
         public Ball(Game1 game)
         {
@@ -53,6 +56,7 @@ namespace MonoGameWindowsStarter
         {
 
             texture = content.Load<Texture2D>("ballThing");
+           
 
         }
 

@@ -32,10 +32,10 @@ namespace MonoGameWindowsStarter
         public void Initialize()
         {
 
-            bound.Width = 10;
-            bound.Height = 10;
+            bound.Width = game.GraphicsDevice.Viewport.Width;
+            bound.Height = 50;
             bound.X = 0;
-            bound.Y = 0;
+            bound.Y = game.GraphicsDevice.Viewport.Height - 50;
 
 
 
@@ -56,14 +56,12 @@ namespace MonoGameWindowsStarter
             var keyboardState = Keyboard.GetState();
            
 
-          
-
 
         }
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(texture, bound, Color.Red);
+            spriteBatch.Draw(texture, bound, Color.Black);
 
         }
 

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Audio;
 using System;
 
 namespace MonoGameWindowsStarter
@@ -15,6 +16,8 @@ namespace MonoGameWindowsStarter
         public Random random = new Random();
         Ball ball;
         Paddle paddle;
+        Ground ground;
+        SpriteFont spriteFont;
  
         KeyboardState oldKeyboardState;
         KeyboardState newKeyboardState;
@@ -27,6 +30,7 @@ namespace MonoGameWindowsStarter
             Content.RootDirectory = "Content";
             paddle = new Paddle(this);
             ball = new Ball(this);
+            ground = new Ground(this);
         }
 
         /// <summary>
@@ -44,6 +48,7 @@ namespace MonoGameWindowsStarter
             graphics.ApplyChanges();
             ball.Initialize();
             paddle.Initialize();
+            ground.Initialize();
            
 
           
@@ -62,10 +67,14 @@ namespace MonoGameWindowsStarter
 
 
             // TODO: use this.Content to load your game content here
+            ground.LoadContent(Content);
+
             ball.LoadContent(Content);
 
             paddle.LoadContent(Content);
 
+
+            spriteFont = Content.Load<SpriteFont>("defaultFont");
 
 
         }
@@ -112,6 +121,14 @@ namespace MonoGameWindowsStarter
 
             }
 
+            if (paddle.bound.CollidesWith(ground.bound))
+            {
+
+                paddle.bound.Y = ground.bound.Y - paddle.bound.Height;
+
+            }
+
+            var size = spriteFont.MeasureString("Have Fun Jumping!");
             oldKeyboardState = newKeyboardState;
             base.Update(gameTime);
         }
@@ -119,15 +136,18 @@ namespace MonoGameWindowsStarter
         /// <summary>
         /// This is called when the game should draw itself.
         /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
+        /// <param name="gameTime">Provides a snapshot of timing values.</param>-
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
             spriteBatch.Begin();
+
+            ground.Draw(spriteBatch);
             ball.Draw(spriteBatch);
             paddle.Draw(spriteBatch);
+            spriteBatch.DrawString(spriteFont, "Have Fun Jumping!" ,new Vector2(0, 50), Color.Black);
 
             spriteBatch.End();
 
