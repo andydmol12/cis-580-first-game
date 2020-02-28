@@ -142,7 +142,11 @@ namespace MonoGameWindowsStarter
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
-            spriteBatch.Begin();
+          
+
+            var offset = new Vector2(421, 520) - new Vector2(paddle.bound.X, paddle.bound.Y);
+            var t = Matrix.CreateTranslation(offset.X, offset.Y, 0);
+            spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, t);
 
             ground.Draw(spriteBatch);
             ball.Draw(spriteBatch);
