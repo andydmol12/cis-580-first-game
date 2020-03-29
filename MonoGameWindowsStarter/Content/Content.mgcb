@@ -62,6 +62,18 @@
 /processorParam:TextureFormat=Color
 /build:Slimefr.png
 
+#begin slimePixel.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:slimePixel.png
+
 #begin slimeSheet.png
 /importer:TextureImporter
 /processor:TextureProcessor

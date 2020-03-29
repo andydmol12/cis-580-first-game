@@ -18,11 +18,15 @@ namespace MonoGameWindowsStarter
         Paddle paddle;
         Ground ground;
         SpriteFont spriteFont;
+        ParticleSystem particleSystem;
+        ParticleSystem particles2;
+        Texture2D particleTexture;
+        
  
         KeyboardState oldKeyboardState;
         KeyboardState newKeyboardState;
 
-
+        
 
         public Game1()
         {
@@ -76,6 +80,69 @@ namespace MonoGameWindowsStarter
 
             spriteFont = Content.Load<SpriteFont>("defaultFont");
 
+            spriteBatch = new SpriteBatch(GraphicsDevice);
+            particleTexture = Content.Load<Texture2D>("pixel");
+
+            particleSystem = new ParticleSystem(GraphicsDevice, 1000, particleTexture);
+            particleSystem.SpawnPerFrame = 4;
+
+          
+            particles2 = new ParticleSystem(GraphicsDevice, 1000, particleTexture);
+            particles2.SpawnPerFrame = 4;
+
+            particleSystem.SpawnParticle = (ref Particle particle) =>
+            {
+
+                MouseState mouse = Mouse.GetState();
+                particle.position = new Vector2(mouse.X, mouse.Y);
+                particle.velocity = new Vector2
+                (MathHelper.Lerp(-30, 30, (float)random.NextDouble()),
+                 MathHelper.Lerp(50,50, (float)random.NextDouble())
+
+                );
+                particle.acceleration = 0.1f * new Vector2(100, (float)-random.NextDouble());
+                particle.color = Color.Red;
+                particle.scale = 1f;
+                particle.life = 1.0f;
+
+
+            };
+
+           
+            particles2.SpawnParticle = (ref Particle particle) =>
+            {
+
+               
+                particle.position = new Vector2(55, 64);
+                particle.velocity = new Vector2
+                (MathHelper.Lerp(-50, 50, (float)random.NextDouble()),
+                 MathHelper.Lerp(0, 100, (float)random.NextDouble())
+
+                );
+                particle.acceleration = 0.1f * new Vector2(0, (float)-random.NextDouble());
+                particle.color = Color.Gold;
+                particle.scale = 1f;
+                particle.life = 1.0f;
+
+
+            };
+
+
+            particles2.UpdateParticle = (float deltaT, ref Particle particle) =>
+            {
+                particle.velocity += deltaT * particle.acceleration;
+                particle.position += deltaT * particle.velocity;
+                particle.scale -= deltaT;
+                particle.life -= deltaT;
+            };
+
+            particleSystem.UpdateParticle = (float deltaT, ref Particle particle) =>
+            {
+                particle.velocity += deltaT * particle.acceleration;
+                particle.position += deltaT * particle.velocity;
+                particle.scale -= deltaT;
+                particle.life -= deltaT;
+            };
 
         }
 
@@ -130,6 +197,8 @@ namespace MonoGameWindowsStarter
 
             var size = spriteFont.MeasureString("Have Fun Jumping!");
             oldKeyboardState = newKeyboardState;
+            particleSystem.Update(gameTime);
+            particles2.Update(gameTime);
             base.Update(gameTime);
         }
 
@@ -152,6 +221,9 @@ namespace MonoGameWindowsStarter
             ball.Draw(spriteBatch);
             paddle.Draw(spriteBatch);
             spriteBatch.DrawString(spriteFont, "Have Fun Jumping!" ,new Vector2(0, 50), Color.Black);
+            particleSystem.Draw();
+            particles2.Draw();
+
 
             spriteBatch.End();
 

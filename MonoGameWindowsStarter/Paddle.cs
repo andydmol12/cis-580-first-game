@@ -23,6 +23,12 @@ namespace MonoGameWindowsStarter
         TimeSpan timer;
         SoundEffect jumpSFX;
         int frame;
+        ParticleSystem slimesprites;
+        SpriteBatch spriteBatch;
+      
+        Texture2D particleTexture;
+        Random random = new Random();
+
 
         enum State
         {
@@ -46,6 +52,8 @@ namespace MonoGameWindowsStarter
             this.game = game;
             timer = new TimeSpan(0);
             state = State.Idle;
+           
+            
 
         }
 
@@ -66,7 +74,39 @@ namespace MonoGameWindowsStarter
             texture = content.Load<Texture2D>("slimeSheet");
             jumpSFX = content.Load<SoundEffect>("jump");
 
+            spriteBatch = new SpriteBatch(game.GraphicsDevice);
+
             
+            particleTexture = content.Load<Texture2D>("slimePixel");
+
+            slimesprites = new ParticleSystem(game.GraphicsDevice, 1000, particleTexture);
+            slimesprites.SpawnPerFrame = 4;
+
+            slimesprites.SpawnParticle = (ref Particle particle) =>
+            {
+
+
+                particle.position = new Vector2(521, 720);
+                particle.velocity = new Vector2
+                (MathHelper.Lerp(-400, 400, (float)random.NextDouble()),
+                 MathHelper.Lerp(0, 100, (float)random.NextDouble())
+
+                );
+                particle.acceleration = 0.1f * new Vector2(0, (float)-random.NextDouble());
+                particle.color = Color.Gold;
+                particle.scale = 1f;
+                particle.life = 0.3f;
+
+
+            };
+
+            slimesprites.UpdateParticle = (float deltaT, ref Particle particle) =>
+            {
+                particle.velocity += deltaT * particle.acceleration;
+                particle.position += deltaT * particle.velocity;
+                particle.scale -= deltaT;
+                particle.life -= deltaT;
+            };
 
         }
 
@@ -84,6 +124,8 @@ namespace MonoGameWindowsStarter
                 velocity.Y = -5f;
                 jumped = true;
                 jumpSFX.Play();
+                
+
 
             }
 
@@ -167,7 +209,12 @@ namespace MonoGameWindowsStarter
                 bound.Y = game.GraphicsDevice.Viewport.Height - bound.Height;
 
             }
+            if (jumped == true)
+            {
+                slimesprites.Update(gameTime);
 
+            }
+            
             frame %= 2;
 
         }
@@ -180,6 +227,7 @@ namespace MonoGameWindowsStarter
                 FRAME_WIDTH,
                 FRAME_HEIGHT);
 
+            slimesprites.Draw();
             spriteBatch.Draw(texture, bound, source, Color.White);
             
         }
