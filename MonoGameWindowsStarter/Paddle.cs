@@ -86,7 +86,7 @@ namespace MonoGameWindowsStarter
             {
 
 
-                particle.position = new Vector2(521, 720);
+                particle.position = new Vector2(bound.X + 100, bound.Y + 100);
                 particle.velocity = new Vector2
                 (MathHelper.Lerp(-400, 400, (float)random.NextDouble()),
                  MathHelper.Lerp(0, 100, (float)random.NextDouble())

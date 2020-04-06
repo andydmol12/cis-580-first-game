@@ -3,6 +3,10 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Audio;
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace MonoGameWindowsStarter
 {
@@ -14,7 +18,6 @@ namespace MonoGameWindowsStarter
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         public Random random = new Random();
-        Ball ball;
         Paddle paddle;
         Ground ground;
         SpriteFont spriteFont;
@@ -33,7 +36,7 @@ namespace MonoGameWindowsStarter
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             paddle = new Paddle(this);
-            ball = new Ball(this);
+       
             ground = new Ground(this);
         }
 
@@ -50,7 +53,6 @@ namespace MonoGameWindowsStarter
             graphics.PreferredBackBufferWidth = 1042;
             graphics.PreferredBackBufferHeight = 768;
             graphics.ApplyChanges();
-            ball.Initialize();
             paddle.Initialize();
             ground.Initialize();
            
@@ -73,9 +75,47 @@ namespace MonoGameWindowsStarter
             // TODO: use this.Content to load your game content here
             ground.LoadContent(Content);
 
-            ball.LoadContent(Content);
 
             paddle.LoadContent(Content);
+
+
+            var backgroundTexture = Content.Load<Texture2D>("pixil-frame-0");
+            var backgroundSprite = new StaticSprite(backgroundTexture , new Vector2(0,65));
+            var backgroundLayer = new ParallaxLayer(this);
+
+            backgroundLayer.Sprites.Add(backgroundSprite);
+            backgroundLayer.DrawOrder = 0;
+            Components.Add(backgroundLayer);
+
+            var backgroundScrollController = backgroundLayer.ScrollController as AutoScrollController;
+            backgroundScrollController.Speed = 10f;
+
+            var midgroundTexture = Content.Load<Texture2D>("midground");
+            var midgroundSprite = new StaticSprite(midgroundTexture, new Vector2(1000, 0));
+            var midgroundLayer = new ParallaxLayer(this);
+
+            midgroundLayer.Sprites.Add(midgroundSprite);
+            midgroundLayer.DrawOrder = 1;
+            Components.Add(midgroundLayer);
+
+            var midgroundScrollController = midgroundLayer.ScrollController as AutoScrollController;
+            midgroundScrollController.Speed = 40f;
+
+
+
+            var skyTexture = Content.Load<Texture2D>("background");
+            var skySprite = new StaticSprite(skyTexture, new Vector2(900, -50));
+            var skyLayer = new ParallaxLayer(this);
+
+
+            skyLayer.Sprites.Add(skySprite);
+            skyLayer.DrawOrder = 0;
+            Components.Add(skyLayer);
+
+            var skyScrollController = skyLayer.ScrollController as AutoScrollController;
+            skyScrollController.Speed = 5f;
+
+
 
 
             spriteFont = Content.Load<SpriteFont>("defaultFont");
@@ -144,6 +184,8 @@ namespace MonoGameWindowsStarter
                 particle.life -= deltaT;
             };
 
+
+
         }
 
         /// <summary>
@@ -172,21 +214,13 @@ namespace MonoGameWindowsStarter
                 Exit();
 
             paddle.Update(gameTime);
-            ball.Update(gameTime);
 
             // TODO: Add your update logic here
 
             
 
             
-            if(paddle.bound.CollidesWith(ball.bound))
-            {
-
-                ball.Velocity.X *= -1;
-                var delta = (paddle.bound.X + paddle.bound.Width) - (ball.bound.X - ball.bound.Radius);
-                ball.bound.X += 2 * delta;
-
-            }
+          
 
             if (paddle.bound.CollidesWith(ground.bound))
             {
@@ -211,14 +245,11 @@ namespace MonoGameWindowsStarter
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
-          
 
-            var offset = new Vector2(421, 520) - new Vector2(paddle.bound.X, paddle.bound.Y);
-            var t = Matrix.CreateTranslation(offset.X, offset.Y, 0);
-            spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, t);
 
+
+            spriteBatch.Begin();
             ground.Draw(spriteBatch);
-            ball.Draw(spriteBatch);
             paddle.Draw(spriteBatch);
             spriteBatch.DrawString(spriteFont, "Have Fun Jumping!" ,new Vector2(0, 50), Color.Black);
             particleSystem.Draw();

@@ -18,8 +18,7 @@ namespace MonoGameWindowsStarter
 
         Texture2D texture;
         Vector2 velocity;
-        bool jumped;
-
+        
 
 
         public Ground(Game1 game)
